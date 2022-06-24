@@ -36,9 +36,7 @@ export const parseFormat = (format: string) => {
       case "%":
         if (isPercentOpen) {
           isPercentOpen = false;
-          // Convert varIdx like 001, 012, or 123.
-          const n = varIdx.toString().padStart(3, "0");
-          result += `%${n}`;
+          result += "(.*)";
           varIdxToStr[varIdx] = buffer;
           varIdx++;
           buffer = "";
@@ -50,7 +48,7 @@ export const parseFormat = (format: string) => {
         if (isPercentOpen) {
           buffer += c;
         } else {
-          result += c;
+          result += c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         }
         break;
     }
